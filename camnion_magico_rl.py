@@ -48,14 +48,14 @@ class CamionMagico(MDPsim):
         
     def es_terminal(self, s):
         return s >= self.meta
-def testing(roro:float = 0.9, gamma:float = 0.999, episodes:int = 100_000):
+def testing(roro:float = 0.99, gamma:float = 0.999, episodes:int = 100_000, SARSA_iter:int = 50, Q_iter:int = 1000):
     mdp_sim = CamionMagico(
         gama=gamma, rho=roro, meta=145
     )
         
     Q_sarsa = SARSA(
         mdp_sim, 
-        alfa=0.1, epsilon=0.02, n_ep=100_000, n_iter=50
+        alfa=0.1, epsilon=0.02, n_ep=episodes, n_iter=SARSA_iter
     )
     pi_s = {s: max(
         ['caminar', 'usar_camion'], key=lambda a: Q_sarsa[(s, a)]
@@ -63,7 +63,7 @@ def testing(roro:float = 0.9, gamma:float = 0.999, episodes:int = 100_000):
 
     Q_ql = Q_learning(
         mdp_sim, 
-        alfa=0.1, epsilon=0.02, n_ep=episodes, n_iter=1000
+        alfa=0.1, epsilon=0.02, n_ep=episodes, n_iter=Q_iter
     )
     pi_ql = {s: max(
         ['caminar', 'usar_camion'], key=lambda a: Q_ql[(s, a)]
@@ -79,14 +79,15 @@ def testing(roro:float = 0.9, gamma:float = 0.999, episodes:int = 100_000):
 
 rhos = [0.4,0.5,0.6,0.7,0.8,0.9,0.999]
 gammas = [0.5,0.6,0.7,0.8,0.9,0.999]
-for rho in rhos:
-    print(f"Para rho = {rho}")
-    testing(roro=rho)
+for _ in range (10):
+    #for rho in rhos:
+        #print(f"Para rho = {rho}")
+        #testing(roro=rho)
 
-for gamma in gammas:
-    print(f"Para gamma = {gamma}")
-    testing(gamma=gamma)
-#testing()
+    #for gamma in gammas:
+        #print(f"Para gamma = {gamma}")
+        #testing(gamma=gamma)
+    testing(episodes=10_000)
 """
 **********************************************************************************
 Ahora responde a las siguientes preguntas:
